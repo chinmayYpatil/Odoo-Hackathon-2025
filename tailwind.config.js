@@ -14,6 +14,7 @@ export default {
         'float': 'float 3s ease-in-out infinite',
         'glow': 'glow 2s ease-in-out infinite alternate',
         'shimmer': 'shimmer 2s linear infinite',
+        'gradient-x': 'gradient-x 3s ease infinite',
       },
       keyframes: {
         fadeIn: {
@@ -49,6 +50,16 @@ export default {
         shimmer: {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' },
+        },
+        'gradient-x': {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          },
         },
       },
       backgroundImage: {
