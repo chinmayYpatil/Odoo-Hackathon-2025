@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import NotificationDropdown from './NotificationDropdown';
+import ThemeToggle from './ThemeToggle';
 import {
   HomeIcon,
   QuestionMarkCircleIcon,
@@ -9,6 +10,7 @@ import {
   ArrowRightOnRectangleIcon,
   Bars3Icon,
   XMarkIcon,
+  ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
@@ -26,6 +28,10 @@ export default function Layout({ children }: LayoutProps) {
     { name: 'Ask Question', href: '/ask', icon: QuestionMarkCircleIcon },
   ];
 
+  const userNavigation = [
+    { name: 'Dashboard', href: '/dashboard', icon: ChartBarIcon },
+  ];
+
   const isActive = (href: string) => {
     return location.pathname === href;
   };
@@ -39,14 +45,16 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b border-gray-200">
+      <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Link to="/" className="flex items-center">
-                <div className="text-2xl font-bold text-blue-600">StackIt</div>
+              <Link to="/" className="flex items-center group">
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors duration-300 animate-bounce-in">
+                  StackIt
+                </div>
               </Link>
             </div>
 
@@ -58,10 +66,27 @@ export default function Layout({ children }: LayoutProps) {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 ${
                       isActive(item.href)
-                        ? 'text-blue-600 bg-blue-50'
-                        : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                        ? 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/30'
+                        : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{item.name}</span>
+                  </Link>
+                );
+              })}
+              {user && userNavigation.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 ${
+                      isActive(item.href)
+                        ? 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/30'
+                        : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -76,18 +101,32 @@ export default function Layout({ children }: LayoutProps) {
               {user ? (
                 <div className="flex items-center space-x-4">
                   <NotificationDropdown />
-                  <div className="flex items-center space-x-2">
-                    <UserIcon className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm font-medium text-gray-700">
+                  <ThemeToggle />
+                  <Link
+                    to="/dashboard"
+                    className="flex items-center space-x-2 hover:bg-gray-50 dark:hover:bg-gray-700 px-3 py-2 rounded-md transition-all duration-300 hover:scale-105 group"
+                  >
+                    <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                      {profile?.avatar_url ? (
+                        <img
+                          src={profile.avatar_url}
+                          alt="Avatar"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <UserIcon className="h-4 w-4 text-white" />
+                      )}
+                    </div>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {profile?.display_name || profile?.username}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
                       ({profile?.reputation || 0} rep)
                     </span>
-                  </div>
+                  </Link>
                   <button
                     onClick={handleSignOut}
-                    className="flex items-center space-x-1 text-sm text-gray-500 hover:text-gray-700"
+                    className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-300 hover:scale-105"
                   >
                     <ArrowRightOnRectangleIcon className="h-4 w-4" />
                     <span>Sign Out</span>
@@ -95,15 +134,16 @@ export default function Layout({ children }: LayoutProps) {
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
+                  <ThemeToggle />
                   <Link
                     to="/login"
-                    className="text-sm font-medium text-gray-700 hover:text-blue-600"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
-                    className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
                   >
                     Sign Up
                   </Link>
@@ -114,7 +154,7 @@ export default function Layout({ children }: LayoutProps) {
               <div className="md:hidden">
                 <button
                   type="button"
-                  className="text-gray-400 hover:text-gray-500"
+                  className="text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 transition-colors duration-300"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
                   {mobileMenuOpen ? (
@@ -129,18 +169,36 @@ export default function Layout({ children }: LayoutProps) {
 
           {/* Mobile Navigation */}
           {mobileMenuOpen && (
-            <div className="md:hidden">
-              <div className="pt-2 pb-3 space-y-1">
+            <div className="md:hidden animate-slide-down">
+              <div className="pt-2 pb-3 space-y-1 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
                 {navigation.map((item) => {
                   const Icon = item.icon;
                   return (
                     <Link
                       key={item.name}
                       to={item.href}
-                      className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium ${
+                      className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-all duration-300 hover:scale-105 ${
                         isActive(item.href)
-                          ? 'text-blue-600 bg-blue-50'
-                          : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                          ? 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/30'
+                          : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span>{item.name}</span>
+                    </Link>
+                  );
+                })}
+                {user && userNavigation.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-all duration-300 hover:scale-105 ${
+                        isActive(item.href)
+                          ? 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/30'
+                          : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700'
                       }`}
                       onClick={() => setMobileMenuOpen(false)}
                     >

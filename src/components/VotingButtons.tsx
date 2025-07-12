@@ -119,7 +119,7 @@ export default function VotingButtons({
       </button>
 
       <span className={`text-lg font-semibold ${
-        votes > 0 ? 'text-green-600' : votes < 0 ? 'text-red-600' : 'text-gray-700'
+        votes > 0 ? 'text-green-600 dark:text-green-400' : votes < 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-gray-300'
       }`}>
         {votes}
       </span>
