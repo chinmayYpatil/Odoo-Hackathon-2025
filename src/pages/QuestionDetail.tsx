@@ -99,9 +99,15 @@ export default function QuestionDetail() {
     if (!id) return;
 
     try {
+      const { data: question } = await supabase
+        .from('questions')
+        .select('view_count')
+        .eq('id', id)
+        .single();
+
       await supabase
         .from('questions')
-        .update({ view_count: supabase.sql`view_count + 1` })
+        .update({ view_count: (question?.view_count || 0) + 1 })
         .eq('id', id);
     } catch (error) {
       console.error('Error incrementing view count:', error);
@@ -251,7 +257,7 @@ export default function QuestionDetail() {
             </div>
 
             <div
-              className="prose dark:prose-invert max-w-none mb-4"
+              className="prose dark:prose-invert text-gray-900 dark:text-gray-100 max-w-none mb-4"
               dangerouslySetInnerHTML={{ __html: question.content }}
             />
 
@@ -314,7 +320,7 @@ export default function QuestionDetail() {
                     )}
 
                     <div
-                      className="prose dark:prose-invert max-w-none mb-4"
+                      className="prose dark:prose-invert text-gray-900 dark:text-gray-100 max-w-none mb-4"
                       dangerouslySetInnerHTML={{ __html: answer.content }}
                     />
 
