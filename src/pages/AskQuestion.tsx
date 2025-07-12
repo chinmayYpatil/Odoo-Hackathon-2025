@@ -105,7 +105,7 @@ export default function AskQuestion() {
         // Update tag question count
         const { error: updateError } = await supabase
           .from('tags')
-          .update({ question_count: (existingTag?.question_count || 0) + 1 })
+          .update({ question_count: 1 })
           .eq('id', tagId);
 
         if (updateError) throw updateError;
@@ -123,12 +123,12 @@ export default function AskQuestion() {
   if (!user) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Sign In Required</h2>
-          <p className="text-gray-600 mb-6">You need to be signed in to ask a question.</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-8 text-center transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-900/70">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Sign In Required</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">You need to be signed in to ask a question.</p>
           <button
             onClick={() => navigate('/login')}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
           >
             Sign In
           </button>
@@ -141,12 +141,12 @@ export default function AskQuestion() {
   if (user && !profile) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
-          <h2 className="text-2xl font-bold text-yellow-800 mb-4">Profile Required</h2>
-          <p className="text-yellow-700 mb-6">You need to create a profile before you can ask questions.</p>
+        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-8 text-center transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-900/70">
+          <h2 className="text-2xl font-bold text-yellow-800 dark:text-yellow-400 mb-4">Profile Required</h2>
+          <p className="text-yellow-700 dark:text-yellow-300 mb-6">You need to create a profile before you can ask questions.</p>
           <button
             onClick={() => navigate('/')}
-            className="bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-yellow-700 transition-colors"
+            className="bg-yellow-600 dark:bg-yellow-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-yellow-700 dark:hover:bg-yellow-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
           >
             Go to Home to Create Profile
           </button>
@@ -157,13 +157,13 @@ export default function AskQuestion() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="bg-white rounded-lg border border-gray-200 p-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Ask a Question</h1>
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-8 transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-900/70">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Ask a Question</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Title *
             </label>
             <input
@@ -172,68 +172,68 @@ export default function AskQuestion() {
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="Be specific and clear about your question"
-              className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                errors.title ? 'border-red-300' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300 ${
+                errors.title ? 'border-red-300 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
               }`}
             />
             {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title}</p>
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.title}</p>
             )}
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Minimum 10 characters. Be specific and clear.
             </p>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Description *
             </label>
             <RichTextEditor
               value={formData.content}
               onChange={(content) => setFormData({ ...formData, content })}
               placeholder="Provide details about your question. Include what you've tried and what specific help you need."
-              className={errors.content ? 'border-red-300' : ''}
+              className={errors.content ? 'border-red-300 dark:border-red-500' : ''}
             />
             {errors.content && (
-              <p className="mt-1 text-sm text-red-600">{errors.content}</p>
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.content}</p>
             )}
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Minimum 20 characters. Use the formatting tools to make your question clear and easy to read.
             </p>
           </div>
 
           {/* Tags */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tags *
             </label>
             <TagSelector
               selectedTags={formData.tags}
               onTagsChange={(tags) => setFormData({ ...formData, tags })}
-              className={errors.tags ? 'border-red-300' : ''}
+              className={errors.tags ? 'border-red-300 dark:border-red-500' : ''}
             />
             {errors.tags && (
-              <p className="mt-1 text-sm text-red-600">{errors.tags}</p>
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.tags}</p>
             )}
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Add up to 5 relevant tags to help others find your question.
             </p>
           </div>
 
           {/* Submit Button */}
-          <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+          <div className="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+              className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 hover:scale-105"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Publishing...' : 'Publish Question'}
             </button>

@@ -5,7 +5,8 @@ import {
   ChatBubbleLeftIcon, 
   EyeIcon, 
   ChevronUpIcon,
-  CheckCircleIcon 
+  CheckCircleIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 import { Database } from '../lib/supabase';
 
@@ -29,51 +30,51 @@ export default function QuestionCard({ question }: QuestionCardProps) {
   const timeAgo = formatDistanceToNow(new Date(question.created_at), { addSuffix: true });
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-lg dark:hover:shadow-gray-900/70 transition-all duration-300 hover:scale-[1.02] group">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center space-x-4 mb-3">
             {/* Vote Count */}
             <div className="flex flex-col items-center space-y-1">
-              <div className="flex items-center space-x-1 text-sm text-gray-500">
-                <ChevronUpIcon className="h-4 w-4" />
+              <div className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400">
+                <ChevronUpIcon className="h-4 w-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
                 <span className="font-medium">{question.votes}</span>
               </div>
-              <span className="text-xs text-gray-400">votes</span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">votes</span>
             </div>
 
             {/* Answer Count */}
             <div className="flex flex-col items-center space-y-1">
               <div className={`flex items-center space-x-1 text-sm ${
-                question.is_answered ? 'text-green-600' : 'text-gray-500'
+                question.is_answered ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'
               }`}>
                 {question.is_answered && <CheckCircleIcon className="h-4 w-4" />}
                 <ChatBubbleLeftIcon className="h-4 w-4" />
                 <span className="font-medium">{question.answer_count}</span>
               </div>
-              <span className="text-xs text-gray-400">answers</span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">answers</span>
             </div>
 
             {/* View Count */}
             <div className="flex flex-col items-center space-y-1">
-              <div className="flex items-center space-x-1 text-sm text-gray-500">
+              <div className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400">
                 <EyeIcon className="h-4 w-4" />
                 <span className="font-medium">{question.view_count}</span>
               </div>
-              <span className="text-xs text-gray-400">views</span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">views</span>
             </div>
           </div>
 
           {/* Question Title */}
           <Link 
             to={`/questions/${question.id}`}
-            className="block text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors mb-2"
+            className="block text-lg font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-2"
           >
             {question.title}
           </Link>
 
           {/* Question Content Preview */}
-          <div className="text-gray-600 text-sm mb-3 line-clamp-2">
+          <div className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
             <div dangerouslySetInnerHTML={{ 
               __html: question.content.replace(/<[^>]*>/g, '').substring(0, 150) + '...' 
             }} />
@@ -84,7 +85,7 @@ export default function QuestionCard({ question }: QuestionCardProps) {
             {question.question_tags.map((qt, index) => (
               <span
                 key={index}
-                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 transition-all duration-300 hover:scale-105"
               >
                 {qt.tags.name}
               </span>
@@ -92,13 +93,18 @@ export default function QuestionCard({ question }: QuestionCardProps) {
           </div>
 
           {/* Author and Time */}
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <span>
-              asked by{' '}
-              <span className="font-medium text-gray-700">
-                {question.profiles.display_name || question.profiles.username}
+          <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex items-center space-x-2">
+              <div className="w-6 h-6 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                <UserIcon className="w-3 h-3 text-white" />
+              </div>
+              <span>
+                asked by{' '}
+                <span className="font-medium text-gray-700 dark:text-gray-300">
+                  {question.profiles.display_name || question.profiles.username}
+                </span>
               </span>
-            </span>
+            </div>
             <span>{timeAgo}</span>
           </div>
         </div>
