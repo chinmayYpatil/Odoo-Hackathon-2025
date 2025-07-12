@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import QuestionCard from '../components/QuestionCard';
+import TypewriterText from '../components/TypewriterText';
 import { supabase, Database } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -128,15 +129,30 @@ export default function Home() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">All Questions</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Ask questions, get answers, and share knowledge with the community
-          </p>
+        <div className="animate-fade-in">
+          <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            Welcome to{' '}
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient-x relative">
+              StackIt
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 blur-xl"></div>
+            </span>
+          </h1>
+          <div className="text-lg text-gray-600 dark:text-gray-400 mt-4 h-8 font-medium">
+            <TypewriterText 
+              texts={[
+                "Where brilliant minds connect and knowledge flows freely ✨",
+                "Your questions find answers, your answers find questions 🚀",
+                "Building the future, one question at a time 💡",
+                "Join the community of curious minds and problem solvers 🌟"
+              ]}
+              speed={60}
+              delay={3000}
+            />
+          </div>
         </div>
         <Link
           to="/ask"
-          className="mt-4 sm:mt-0 bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+          className="mt-4 sm:mt-0 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 dark:hover:from-blue-600 dark:hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl animate-bounce-in"
         >
           Ask Question
         </Link>
