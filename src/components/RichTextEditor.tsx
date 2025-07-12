@@ -45,7 +45,7 @@ const RichTextEditor = forwardRef<ReactQuill, RichTextEditorProps>(
             borderRadius: '0.5rem',
           }}
         />
-        <style jsx global>{`
+        <style>{`
           .rich-text-editor .ql-editor {
             min-height: 150px;
             font-size: 14px;

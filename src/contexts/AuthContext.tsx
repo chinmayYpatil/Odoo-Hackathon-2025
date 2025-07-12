@@ -12,6 +12,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, username: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  createProfile: (username: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -97,7 +98,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             display_name: username,
           });
 
-        if (profileError) throw profileError;
+        if (profileError) {
+          console.error('Profile creation error:', profileError);
+          // Don't throw error for profile creation, just log it
+          // The user can still sign in and create profile later
+        }
       }
     } catch (error: any) {
       throw new Error(error.message);
@@ -134,6 +139,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const createProfile = async (username: string) => {
+    if (!user) throw new Error('No user logged in');
+    
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .insert({
+          id: user.id,
+          username,
+          display_name: username,
+        });
+
+      if (error) throw error;
+      
+      // Refresh profile
+      await fetchProfile(user.id);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
+
   const value = {
     user,
     profile,
@@ -142,6 +168,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signIn,
     signOut,
+    createProfile,
   };
 
   return (
