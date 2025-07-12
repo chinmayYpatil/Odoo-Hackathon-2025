@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import AvatarUpload from '../components/AvatarUpload';
-import ConversationsList from '../components/ConversationsList';
 import { User, Shield, MapPin, GraduationCap, Briefcase, Globe, Github, Linkedin, Twitter, Edit3, Save, X, Award, Clock, Users, MessageSquare, Eye, ThumbsUp } from 'lucide-react';
 
 interface DashboardStats {
@@ -648,15 +647,7 @@ const UserDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Conversations */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-900/70 animate-scale-in">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Chat Conversations</h3>
-              </div>
-              <div className="p-6">
-                <ConversationsList />
-              </div>
-            </div>
+
           </div>
         </div>
       </div>

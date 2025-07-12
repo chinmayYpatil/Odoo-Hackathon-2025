@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import NotificationDropdown from './NotificationDropdown';
+import ChatDropdown from './ChatDropdown';
 import ThemeToggle from './ThemeToggle';
 import {
   HomeIcon,
@@ -100,6 +101,7 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center space-x-4">
               {user ? (
                 <div className="flex items-center space-x-4">
+                  <ChatDropdown />
                   <NotificationDropdown />
                   <ThemeToggle />
                   {/* Desktop User Profile - Hidden on mobile */}

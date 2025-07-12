@@ -110,8 +110,26 @@ export default function ChatPage() {
           table: 'messages',
           filter: `conversation_id=eq.${conversationId}`,
         },
-        (payload) => {
-          fetchConversation(); // Refresh conversation to get new message with sender info
+        async (payload) => {
+          // Fetch the new message with sender info
+          const { data: newMessage, error } = await supabase
+            .from('messages')
+            .select(`
+              *,
+              sender:sender_id (username, display_name, avatar_url)
+            `)
+            .eq('id', payload.new.id)
+            .single();
+
+          if (!error && newMessage) {
+            setConversation(prev => {
+              if (!prev) return prev;
+              return {
+                ...prev,
+                messages: [...prev.messages, newMessage]
+              };
+            });
+          }
         }
       )
       .subscribe();
