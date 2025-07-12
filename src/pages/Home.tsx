@@ -86,20 +86,7 @@ export default function Home() {
   const fetchQuestions = async () => {
     setLoading(true);
     try {
-      // Fetch total count for pagination
-      let countQuery = supabase
-        .from('questions')
-        .select('*', { count: 'exact', head: true });
-      // Apply search filter
-      if (searchTerm.trim()) {
-        countQuery = countQuery.or(`title.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%`);
-      }
-      if (selectedTag) {
-        countQuery = countQuery.eq('question_tags.tags.name', selectedTag);
-      }
-      const { count } = await countQuery;
-      setTotalPages(Math.max(1, Math.ceil((count || 0) / pageSize)));
-
+      // Fetch all questions for now (pagination and search still apply)
       let query = supabase
         .from('questions')
         .select(`
@@ -111,9 +98,6 @@ export default function Home() {
         `);
       if (searchTerm.trim()) {
         query = query.or(`title.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%`);
-      }
-      if (selectedTag) {
-        query = query.eq('question_tags.tags.name', selectedTag);
       }
       switch (sortBy) {
         case 'votes':
@@ -129,7 +113,15 @@ export default function Home() {
       const to = from + pageSize - 1;
       const { data, error } = await query.range(from, to);
       if (error) throw error;
-      setQuestions(data || []);
+      let filteredQuestions = data || [];
+      if (selectedTag) {
+        filteredQuestions = filteredQuestions.filter(q =>
+          q.question_tags?.some((qt: { tags?: { name?: string } }) => qt?.tags?.name === selectedTag)
+        );
+      }
+      setQuestions(filteredQuestions);
+      // Update totalPages for pagination
+      setTotalPages(Math.max(1, Math.ceil((filteredQuestions.length || 0) / pageSize)));
     } catch (error) {
       console.error('Error fetching questions:', error);
     } finally {

@@ -101,12 +101,12 @@ export default function QuestionCard({ question }: QuestionCardProps) {
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-3">
-            {question.question_tags.map((qt, index) => (
+            {question.question_tags?.map((qt, index) => (
               <span
                 key={index}
                 className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 transition-all duration-300 hover:scale-105"
               >
-                {qt.tags.name}
+                {qt?.tags?.name ?? "Unknown Tag"}
               </span>
             ))}
           </div>
