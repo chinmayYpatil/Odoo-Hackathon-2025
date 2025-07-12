@@ -71,7 +71,7 @@ export default function AskQuestion() {
         // First, try to get existing tag or create it
         const { data: existingTag, error: tagSelectError } = await supabase
           .from('tags')
-          .select('id')
+          .select('id, question_count')
           .eq('name', tagName.toLowerCase())
           .single();
 
