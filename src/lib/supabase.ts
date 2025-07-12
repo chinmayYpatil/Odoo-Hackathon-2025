@@ -200,6 +200,102 @@ export type Database = {
           vote_type?: number;
         };
       };
+      conversations: {
+        Row: {
+          id: string;
+          initiator_id: string;
+          recipient_id: string;
+          question_id: string | null;
+          status: string;
+          tokens_charged: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          initiator_id: string;
+          recipient_id: string;
+          question_id?: string | null;
+          status?: string;
+          tokens_charged?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          initiator_id?: string;
+          recipient_id?: string;
+          question_id?: string | null;
+          status?: string;
+          tokens_charged?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      messages: {
+        Row: {
+          id: string;
+          conversation_id: string;
+          sender_id: string;
+          content: string;
+          message_type: string;
+          is_read: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          conversation_id: string;
+          sender_id: string;
+          content: string;
+          message_type?: string;
+          is_read?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          conversation_id?: string;
+          sender_id?: string;
+          content?: string;
+          message_type?: string;
+          is_read?: boolean;
+          created_at?: string;
+        };
+      };
+      chat_requests: {
+        Row: {
+          id: string;
+          requester_id: string;
+          recipient_id: string;
+          question_id: string;
+          status: string;
+          tokens_offered: number;
+          message: string | null;
+          created_at: string;
+          expires_at: string;
+        };
+        Insert: {
+          id?: string;
+          requester_id: string;
+          recipient_id: string;
+          question_id: string;
+          status?: string;
+          tokens_offered: number;
+          message?: string | null;
+          created_at?: string;
+          expires_at?: string;
+        };
+        Update: {
+          id?: string;
+          requester_id?: string;
+          recipient_id?: string;
+          question_id?: string;
+          status?: string;
+          tokens_offered?: number;
+          message?: string | null;
+          created_at?: string;
+          expires_at?: string;
+        };
+      };
     };
   };
 };

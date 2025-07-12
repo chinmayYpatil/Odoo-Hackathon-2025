@@ -6,6 +6,7 @@ import { CheckCircleIcon as CheckCircleSolid } from '@heroicons/react/24/solid';
 import { useAuth } from '../contexts/AuthContext';
 import VotingButtons from '../components/VotingButtons';
 import RichTextEditor from '../components/RichTextEditor';
+import ChatButton from '../components/ChatButton';
 import { supabase, Database } from '../lib/supabase';
 
 type Question = Database['public']['Tables']['questions']['Row'] & {
@@ -282,6 +283,14 @@ export default function QuestionDetail() {
                   ({question.profiles.reputation} rep)
                 </span>
               </div>
+              
+              {/* Chat Button */}
+              <ChatButton
+                questionId={question.id}
+                authorId={question.author_id}
+                authorName={question.profiles.display_name || question.profiles.username}
+                questionTitle={question.title}
+              />
             </div>
           </div>
         </div>
@@ -347,17 +356,27 @@ export default function QuestionDetail() {
                         )}
                       </div>
 
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        Answered by{' '}
-                        <span className="font-medium text-gray-700 dark:text-gray-300">
-                          {answer.profiles.display_name || answer.profiles.username}
-                        </span>
-                        <span className="text-gray-400 dark:text-gray-500 ml-1">
-                          ({answer.profiles.reputation} rep)
-                        </span>
-                        <span className="ml-2">
-                          {formatDistanceToNow(new Date(answer.created_at), { addSuffix: true })}
-                        </span>
+                      <div className="flex items-center gap-4">
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          Answered by{' '}
+                          <span className="font-medium text-gray-700 dark:text-gray-300">
+                            {answer.profiles.display_name || answer.profiles.username}
+                          </span>
+                          <span className="text-gray-400 dark:text-gray-500 ml-1">
+                            ({answer.profiles.reputation} rep)
+                          </span>
+                          <span className="ml-2">
+                            {formatDistanceToNow(new Date(answer.created_at), { addSuffix: true })}
+                          </span>
+                        </div>
+                        
+                        {/* Chat Button for Answer Author */}
+                        <ChatButton
+                          questionId={question.id}
+                          authorId={answer.author_id}
+                          authorName={answer.profiles.display_name || answer.profiles.username}
+                          questionTitle={question.title}
+                        />
                       </div>
                     </div>
                   </div>
