@@ -6,7 +6,7 @@ import TagSelector from '../components/TagSelector';
 import { supabase } from '../lib/supabase';
 
 export default function AskQuestion() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
@@ -105,7 +105,7 @@ export default function AskQuestion() {
         // Update tag question count
         const { error: updateError } = await supabase
           .from('tags')
-          .update({ question_count: supabase.sql`question_count + 1` })
+          .update({ question_count: (existingTag?.question_count || 0) + 1 })
           .eq('id', tagId);
 
         if (updateError) throw updateError;
@@ -131,6 +131,24 @@ export default function AskQuestion() {
             className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
           >
             Sign In
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if user has a profile
+  if (user && !profile) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
+          <h2 className="text-2xl font-bold text-yellow-800 mb-4">Profile Required</h2>
+          <p className="text-yellow-700 mb-6">You need to create a profile before you can ask questions.</p>
+          <button
+            onClick={() => navigate('/')}
+            className="bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-yellow-700 transition-colors"
+          >
+            Go to Home to Create Profile
           </button>
         </div>
       </div>

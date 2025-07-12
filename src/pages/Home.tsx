@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import QuestionCard from '../components/QuestionCard';
 import { supabase, Database } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 type Question = Database['public']['Tables']['questions']['Row'] & {
   profiles: {
@@ -17,6 +18,7 @@ type Question = Database['public']['Tables']['questions']['Row'] & {
 };
 
 export default function Home() {
+  useAuth();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
