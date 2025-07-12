@@ -2,7 +2,7 @@
 
 
 problem statement-StackIt – A Minimal Q&A Forum Platform
-team name-One Last Dance
+team name-Last Dance
 email-
 chinmay7016@gmail.com,
 devansh.kyada@gmail.com
