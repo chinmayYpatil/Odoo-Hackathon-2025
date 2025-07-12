@@ -82,29 +82,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signUp = async (email: string, password: string, username: string) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
       });
 
       if (error) throw error;
-
-      if (data.user) {
-        // Create profile
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert({
-            id: data.user.id,
-            username,
-            display_name: username,
-          });
-
-        if (profileError) {
-          console.error('Profile creation error:', profileError);
-          // Don't throw error for profile creation, just log it
-          // The user can still sign in and create profile later
-        }
-      }
+      // Do NOT create profile here!
     } catch (error: any) {
       throw new Error(error.message);
     } finally {
@@ -112,15 +96,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string, username?: string) => {
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
-
       if (error) throw error;
+
+      // After login, check if profile exists
+      const userId = data.user?.id;
+      if (userId) {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', userId)
+          .single();
+
+        if (!profile && username) {
+          // Create profile if missing
+          const { error: createError } = await supabase
+            .from('profiles')
+            .insert({
+              id: userId,
+              username,
+              display_name: username,
+            });
+          if (createError) {
+            console.error('Profile creation error:', createError);
+            alert('Profile creation failed: ' + createError.message);
+          } else {
+            console.log('Profile created successfully for user:', userId, username);
+          }
+        }
+      }
     } catch (error: any) {
       throw new Error(error.message);
     } finally {

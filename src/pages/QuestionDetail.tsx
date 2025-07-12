@@ -99,9 +99,15 @@ export default function QuestionDetail() {
     if (!id) return;
 
     try {
+      const { data: question } = await supabase
+        .from('questions')
+        .select('view_count')
+        .eq('id', id)
+        .single();
+
       await supabase
         .from('questions')
-        .update({ view_count: supabase.sql`view_count + 1` })
+        .update({ view_count: (question?.view_count || 0) + 1 })
         .eq('id', id);
     } catch (error) {
       console.error('Error incrementing view count:', error);

@@ -19,18 +19,42 @@ type Question = Database['public']['Tables']['questions']['Row'] & {
 };
 
 export default function Home() {
-  useAuth();
+  const { user, profile, createProfile } = useAuth();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'newest' | 'votes' | 'unanswered'>('newest');
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
+  const [showProfileForm, setShowProfileForm] = useState(false);
+  const [username, setUsername] = useState('');
+  const [creatingProfile, setCreatingProfile] = useState(false);
 
   useEffect(() => {
     fetchQuestions();
     fetchTags();
   }, [sortBy, selectedTag]);
+
+  // Show profile form if user is logged in but doesn't have a profile
+  useEffect(() => {
+    if (user && !profile && !loading) {
+      setShowProfileForm(true);
+    }
+  }, [user, profile, loading]);
+
+  const handleCreateProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!username.trim()) return;
+    setCreatingProfile(true);
+    try {
+      await createProfile(username.trim());
+      setShowProfileForm(false);
+    } catch (error: any) {
+      alert('Failed to create profile: ' + error.message);
+    } finally {
+      setCreatingProfile(false);
+    }
+  };
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
@@ -246,6 +270,46 @@ export default function Home() {
           ))
         )}
       </div>
+      {showProfileForm && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3 flex-1">
+              <h3 className="text-sm font-medium text-yellow-800">
+                Complete Your Profile
+              </h3>
+              <div className="mt-2 text-sm text-yellow-700">
+                <p>You need to create a profile before you can ask questions or interact with the community.</p>
+              </div>
+              <form onSubmit={handleCreateProfile} className="mt-4">
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Choose a username"
+                    className="flex-1 px-3 py-2 border border-yellow-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500"
+                    required
+                    minLength={3}
+                    maxLength={20}
+                  />
+                  <button
+                    type="submit"
+                    disabled={creatingProfile || !username.trim()}
+                    className="bg-yellow-600 text-white px-4 py-2 rounded-md font-medium hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {creatingProfile ? 'Creating...' : 'Create Profile'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
