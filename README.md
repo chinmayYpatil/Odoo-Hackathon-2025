@@ -1,119 +1,88 @@
-# Odoo-Hackathon-2025
+# StackIt – A Minimal Q&A Forum Platform
 
+A minimal Q&A forum built with React, TypeScript, Vite, Supabase, and Tailwind CSS.
 
-# problem statement-StackIt – A Minimal Q&A Forum Platform
-# team name-Last Dance
-email-
-# chinmay7016@gmail.com,
-# devansh.kyada@gmail.com
+## Problem Statement
+StackIt is a minimal Q&A forum platform, built for the Odoo Hackathon 2025.
 
-# StackIt
+**Team Name:** Last Dance  
+**Emails:** chinmay7016@gmail.com, devansh.kyada@gmail.com
 
-## 🚀 Deploy to Vercel
+---
 
-### Prerequisites
-- Vercel account
-- Supabase project with database and storage configured
-- Git repository with your StackIt code
+## Features
+- User authentication (Supabase Auth)
+- Ask and answer questions
+- Tagging system
+- Voting, notifications, and chat
+- User profiles with avatars (Supabase Storage)
+- Responsive, modern UI (Tailwind CSS)
 
-### Step 1: Prepare Your Repository
-1. Make sure your code is pushed to a Git repository (GitHub, GitLab, or Bitbucket)
-2. Ensure all dependencies are in `package.json`
-3. Verify your `vercel.json` configuration file is in the root directory
+---
 
-### Step 2: Set Up Environment Variables
-Before deploying, you need to set up your Supabase environment variables in Vercel:
+## Getting Started
 
-1. Go to your Vercel dashboard
-2. Create a new project from your Git repository
-3. In the project settings, go to "Environment Variables"
-4. Add the following variables:
-   - `VITE_SUPABASE_URL`: Your Supabase project URL
-   - `VITE_SUPABASE_ANON_KEY`: Your Supabase anonymous key
+### 1. Prerequisites
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [npm](https://www.npmjs.com/)
+- [Supabase](https://supabase.com/) account (free tier is fine)
 
-### Step 3: Deploy
-1. Connect your Git repository to Vercel
-2. Vercel will automatically detect it's a Vite project
-3. Click "Deploy"
-4. Wait for the build to complete
-
-### Step 4: Configure Custom Domain (Optional)
-1. In your Vercel project settings, go to "Domains"
-2. Add your custom domain
-3. Update the `sitemap.xml` and `robots.txt` files with your actual domain
-
-### Step 5: Update Supabase Settings
-1. Go to your Supabase dashboard
-2. Navigate to Settings > API
-3. Add your Vercel domain to the allowed origins
-4. Update RLS policies if needed
-
-## 📁 File Structure
-```
-stackit/
-├── vercel.json          # Vercel configuration
-├── public/
-├── src/                 # React source code
-├── package.json         # Dependencies
-└── vite.config.ts       # Vite configuration
-```
-
-## 🔧 Configuration Details
-
-### vercel.json Features:
-- **SPA Routing**: All routes redirect to `index.html` for React Router
-- **Static Assets**: Optimized caching for static files
-- **Security Headers**: XSS protection, content type options, etc.
-- **Environment Variables**: Supabase configuration
-- **Build Configuration**: Uses Vite build output
-
-### Environment Variables:
+### 2. Clone the Repository
 ```bash
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+git clone https://github.com/your-username/Odoo-Hackathon-2025.git
+cd Odoo-Hackathon-2025
 ```
 
-## 🚀 Post-Deployment Checklist
+### 3. Install Dependencies
+```bash
+npm install
+```
 
-- [ ] Test the landing page loads correctly
-- [ ] Verify user registration and login works
-- [ ] Test question creation and answering
-- [ ] Check chat functionality with token deduction
-- [ ] Verify dark/light theme switching
-- [ ] Test mobile responsiveness
-- [ ] Check real-time features (chat, notifications)
-- [ ] Verify file uploads (avatars) work
-- [ ] Test search and filtering functionality
+### 4. Set Up Environment Variables
+Create a `.env` file in the root directory with the following:
+```env
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+You can find these in your Supabase project dashboard under Project Settings > API.
 
-## 🔍 Troubleshooting
+### 5. Set Up Supabase Database
+1. **Create a new project** in Supabase.
+2. **Run the migrations** in the `supabase/migrations/` folder using the [Supabase SQL editor](https://app.supabase.com/project/_/sql) or the [Supabase CLI](https://supabase.com/docs/guides/cli):
+   - Run each `.sql` file in order to set up tables, policies, and sample data.
+3. **Set up storage bucket for avatars:**
+   - Run the migration `20250713000001_create_avatars_bucket.sql` to create the avatars bucket and policies.
 
-### Common Issues:
+### 6. Start the Development Server
+```bash
+npm run dev
+```
+Visit [http://localhost:5173](http://localhost:5173) in your browser.
 
-1. **Build Fails**: Check if all dependencies are in `package.json`
-2. **Environment Variables**: Ensure Supabase URL and key are set correctly
-3. **CORS Errors**: Add your Vercel domain to Supabase allowed origins
-4. **Routing Issues**: Verify `vercel.json` has proper SPA routing configuration
-5. **Real-time Features**: Check Supabase real-time subscriptions are enabled
+---
 
-### Performance Optimization:
-- Static assets are cached for 1 year
-- Images are optimized automatically
-- Code splitting is handled by Vite
-- Gzip compression is enabled by default
+## Scripts
+- `npm run dev` — Start development server
+- `npm run build` — Build for production
+- `npm run preview` — Preview production build
+- `npm run lint` — Run ESLint
 
-## 📊 Monitoring
+---
 
-After deployment, monitor:
-- Build logs in Vercel dashboard
-- Function execution times
-- Error rates
-- User analytics (if configured)
+## Project Structure
+- `src/` — React app source code
+- `supabase/migrations/` — SQL migrations for database schema
+- `src/lib/supabase.ts` — Supabase client setup
 
-## 🔄 Continuous Deployment
+---
 
-Vercel automatically deploys on:
-- Push to main branch
-- Pull request creation
-- Manual deployment from dashboard
+## Notes
+- The app **will not work** without a properly configured Supabase backend.
+- Make sure to run all migrations and set the required environment variables.
+- For avatars, ensure the Supabase storage bucket and policies are set up (see migrations).
+- For any issues, check your browser console and Supabase logs.
 
-Your StackIt Q&A platform is now ready for production! 🎉
+---
+
+## License
+MIT
