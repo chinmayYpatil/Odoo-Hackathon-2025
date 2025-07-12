@@ -102,24 +102,24 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-        <div className="animate-fade-in">
-          <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 text-center lg:text-left">
+        <div className="animate-fade-in mb-6 lg:mb-0">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 lg:mb-4">
             Welcome to{' '}
             <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient-x relative">
               StackIt
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 blur-xl"></div>
             </span>
           </h1>
-          <div className="text-lg text-gray-600 dark:text-gray-400 mt-4 h-8 font-medium">
+          <div className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mt-3 lg:mt-4 h-6 sm:h-8 font-medium px-2 lg:px-0">
             <TypewriterText 
               texts={[
                 "Where brilliant minds connect and knowledge flows freely ✨",
-                "Your questions find answers, your answers find questions 🚀",
+                "Questions find answers, answers find questions 🚀",
                 "Building the future, one question at a time 💡",
-                "Join the community of curious minds and problem solvers 🌟"
+                "Join curious minds and problem solvers 🌟"
               ]}
               speed={60}
               delay={3000}
@@ -128,17 +128,17 @@ export default function Home() {
         </div>
         <Link
           to="/ask"
-          className="mt-4 sm:mt-0 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 dark:hover:from-blue-600 dark:hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl animate-bounce-in"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 dark:hover:from-blue-600 dark:hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl animate-bounce-in text-sm sm:text-base"
         >
           Ask Question
         </Link>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 mb-6 transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-900/70">
-        <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4">
+      <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg border border-gray-200 dark:border-gray-700 mb-6 transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-900/70">
+        <div className="flex flex-col space-y-4">
           {/* Search */}
-          <div className="flex-1">
+          <div className="w-full">
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
               <input
@@ -146,71 +146,74 @@ export default function Home() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search questions..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
               />
             </div>
           </div>
 
-          {/* Sort Filter */}
-          <div className="flex items-center space-x-2">
-            <FunnelIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+          {/* Filters Row */}
+          <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            {/* Sort Filter */}
+            <div className="flex items-center space-x-2">
+              <FunnelIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="flex-1 sm:flex-none border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
+              >
+                <option value="newest">Newest</option>
+                <option value="votes">Most Votes</option>
+                <option value="unanswered">Unanswered</option>
+              </select>
+            </div>
+
+            {/* Tag Filter */}
             <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
+              value={selectedTag}
+              onChange={(e) => setSelectedTag(e.target.value)}
+              className="flex-1 sm:flex-none border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
             >
-              <option value="newest">Newest</option>
-              <option value="votes">Most Votes</option>
-              <option value="unanswered">Unanswered</option>
+              <option value="">All Tags</option>
+              {tags.map((tag) => (
+                <option key={tag} value={tag}>
+                  {tag}
+                </option>
+              ))}
             </select>
           </div>
-
-          {/* Tag Filter */}
-          <select
-            value={selectedTag}
-            onChange={(e) => setSelectedTag(e.target.value)}
-            className="border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
-          >
-            <option value="">All Tags</option>
-            {tags.map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
-          </select>
         </div>
 
         {/* Active Filters */}
         {(searchTerm || selectedTag || sortBy !== 'newest') && (
           <div className="mt-4 flex flex-wrap gap-2">
             {searchTerm && (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 transition-all duration-300 hover:scale-105">
+              <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 transition-all duration-300 hover:scale-105">
                 Search: "{searchTerm}"
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="ml-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                  className="ml-1 sm:ml-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
                 >
                   ×
                 </button>
               </span>
             )}
             {selectedTag && (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 transition-all duration-300 hover:scale-105">
+              <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 transition-all duration-300 hover:scale-105">
                 Tag: {selectedTag}
                 <button
                   onClick={() => setSelectedTag('')}
-                  className="ml-2 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors"
+                  className="ml-1 sm:ml-2 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors"
                 >
                   ×
                 </button>
               </span>
             )}
             {sortBy !== 'newest' && (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 transition-all duration-300 hover:scale-105">
+              <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 transition-all duration-300 hover:scale-105">
                 Sort: {sortBy}
                 <button
                   onClick={() => setSortBy('newest')}
-                  className="ml-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors"
+                  className="ml-1 sm:ml-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors"
                 >
                   ×
                 </button>
@@ -230,12 +233,12 @@ export default function Home() {
             </div>
           </div>
         ) : questions.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 dark:text-gray-400 text-lg">No questions found</p>
-            <p className="text-gray-400 dark:text-gray-500 mt-2">Try adjusting your search filters or be the first to ask a question!</p>
+          <div className="text-center py-8 sm:py-12 px-4">
+            <p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg">No questions found</p>
+            <p className="text-gray-400 dark:text-gray-500 mt-2 text-sm sm:text-base">Try adjusting your search filters or be the first to ask a question!</p>
             <Link
               to="/ask"
-              className="inline-block mt-4 bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              className="inline-block mt-4 bg-blue-600 dark:bg-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base"
             >
               Ask the First Question
             </Link>

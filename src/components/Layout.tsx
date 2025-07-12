@@ -102,11 +102,44 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="flex items-center space-x-4">
                   <NotificationDropdown />
                   <ThemeToggle />
-                  <Link
-                    to="/dashboard"
-                    className="flex items-center space-x-2 hover:bg-gray-50 dark:hover:bg-gray-700 px-3 py-2 rounded-md transition-all duration-300 hover:scale-105 group"
-                  >
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                  {/* Desktop User Profile - Hidden on mobile */}
+                  <div className="hidden md:flex items-center space-x-4">
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center space-x-2 hover:bg-gray-50 dark:hover:bg-gray-700 px-3 py-2 rounded-md transition-all duration-300 hover:scale-105 group"
+                    >
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                        {profile?.avatar_url ? (
+                          <img
+                            src={profile.avatar_url}
+                            alt="Avatar"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <UserIcon className="h-4 w-4 text-white" />
+                        )}
+                      </div>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {profile?.display_name || profile?.username}
+                      </span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        ({profile?.reputation || 0} rep)
+                      </span>
+                    </Link>
+                    <button
+                      onClick={handleSignOut}
+                      className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-300 hover:scale-105"
+                    >
+                      <ArrowRightOnRectangleIcon className="h-4 w-4" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                  {/* Mobile User Avatar - Only show avatar on mobile */}
+                  <div className="md:hidden">
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-105 transition-transform duration-300"
+                    >
                       {profile?.avatar_url ? (
                         <img
                           src={profile.avatar_url}
@@ -116,21 +149,8 @@ export default function Layout({ children }: LayoutProps) {
                       ) : (
                         <UserIcon className="h-4 w-4 text-white" />
                       )}
-                    </div>
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {profile?.display_name || profile?.username}
-                    </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      ({profile?.reputation || 0} rep)
-                    </span>
-                  </Link>
-                  <button
-                    onClick={handleSignOut}
-                    className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-300 hover:scale-105"
-                  >
-                    <ArrowRightOnRectangleIcon className="h-4 w-4" />
-                    <span>Sign Out</span>
-                  </button>
+                    </Link>
+                  </div>
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
@@ -207,6 +227,42 @@ export default function Layout({ children }: LayoutProps) {
                     </Link>
                   );
                 })}
+                {/* Mobile User Profile Section */}
+                {user && (
+                  <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3">
+                    <div className="flex items-center space-x-3 px-3 py-2">
+                      <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                        {profile?.avatar_url ? (
+                          <img
+                            src={profile.avatar_url}
+                            alt="Avatar"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <UserIcon className="h-5 w-5 text-white" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          {profile?.display_name || profile?.username}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                          {profile?.reputation || 0} reputation
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        handleSignOut();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="flex items-center space-x-2 px-3 py-2 w-full text-left text-base font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-300"
+                    >
+                      <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
