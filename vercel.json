@@ -2,8 +2,8 @@
   "version": 2,
   "name": "stackit",
   "env": {
-    "VITE_SUPABASE_URL": "@vite_supabase_url",
-    "VITE_SUPABASE_ANON_KEY": "@vite_supabase_anon_key"
+    "VITE_SUPABASE_URL": "https://terismuovwsjphpamtcs.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcmlzbXVvdndzanBocGFtdGNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIyOTU2MzIsImV4cCI6MjA2Nzg3MTYzMn0.ys-jGS8v5-vHxa0W9pcW7TBZNk0Rg5G1OJvIlpMl078"
   },
   "functions": {
     "api/**/*.js": {
