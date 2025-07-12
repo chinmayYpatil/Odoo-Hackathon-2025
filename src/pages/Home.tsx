@@ -29,11 +29,14 @@ export default function Home() {
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [username, setUsername] = useState('');
   const [creatingProfile, setCreatingProfile] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 10;
 
   useEffect(() => {
     fetchQuestions();
     fetchTags();
-  }, [sortBy, selectedTag]);
+  }, [sortBy, selectedTag, currentPage]);
 
   // Show profile form if user is logged in but doesn't have a profile
   useEffect(() => {
@@ -58,6 +61,7 @@ export default function Home() {
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
+      setCurrentPage(1); // Reset to first page on search
       fetchQuestions();
     }, 300);
 
@@ -82,6 +86,20 @@ export default function Home() {
   const fetchQuestions = async () => {
     setLoading(true);
     try {
+      // Fetch total count for pagination
+      let countQuery = supabase
+        .from('questions')
+        .select('*', { count: 'exact', head: true });
+      // Apply search filter
+      if (searchTerm.trim()) {
+        countQuery = countQuery.or(`title.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%`);
+      }
+      if (selectedTag) {
+        countQuery = countQuery.eq('question_tags.tags.name', selectedTag);
+      }
+      const { count } = await countQuery;
+      setTotalPages(Math.max(1, Math.ceil((count || 0) / pageSize)));
+
       let query = supabase
         .from('questions')
         .select(`
@@ -91,18 +109,12 @@ export default function Home() {
             tags (name)
           )
         `);
-
-      // Apply search filter
       if (searchTerm.trim()) {
         query = query.or(`title.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%`);
       }
-
-      // Apply tag filter
       if (selectedTag) {
         query = query.eq('question_tags.tags.name', selectedTag);
       }
-
-      // Apply sorting
       switch (sortBy) {
         case 'votes':
           query = query.order('votes', { ascending: false });
@@ -113,9 +125,9 @@ export default function Home() {
         default:
           query = query.order('created_at', { ascending: false });
       }
-
-      const { data, error } = await query.limit(20);
-
+      const from = (currentPage - 1) * pageSize;
+      const to = from + pageSize - 1;
+      const { data, error } = await query.range(from, to);
       if (error) throw error;
       setQuestions(data || []);
     } catch (error) {
@@ -270,6 +282,40 @@ export default function Home() {
           ))
         )}
       </div>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-8">
+          <nav className="inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="relative inline-flex items-center px-3 py-2 rounded-l-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
+            >
+              {'<'}
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`relative inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium transition-colors duration-200 ${
+                  page === currentPage
+                    ? 'z-10 text-white bg-blue-600 dark:bg-white dark:text-gray-900' // Highlight current page
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="relative inline-flex items-center px-3 py-2 rounded-r-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
+            >
+              {'>'}
+            </button>
+          </nav>
+        </div>
+      )}
       {showProfileForm && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
           <div className="flex items-start">
