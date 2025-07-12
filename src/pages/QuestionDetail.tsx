@@ -257,7 +257,7 @@ export default function QuestionDetail() {
             </div>
 
             <div
-              className="prose dark:prose-invert max-w-none mb-4"
+              className="prose dark:prose-invert text-gray-900 dark:text-gray-100 max-w-none mb-4"
               dangerouslySetInnerHTML={{ __html: question.content }}
             />
 
@@ -320,7 +320,7 @@ export default function QuestionDetail() {
                     )}
 
                     <div
-                      className="prose dark:prose-invert max-w-none mb-4"
+                      className="prose dark:prose-invert text-gray-900 dark:text-gray-100 max-w-none mb-4"
                       dangerouslySetInnerHTML={{ __html: answer.content }}
                     />
 
